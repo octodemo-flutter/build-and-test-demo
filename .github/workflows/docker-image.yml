@@ -5,6 +5,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    
+  workflow_dispatch:
 
 jobs:
 
@@ -14,5 +16,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
+    - name: Login to GHCR.io
+      uses: docker/login-action@v1.10.0
+      with:
+        registry: ghcr.io
+        password: ${{ secrets.GITHUB_TOKEN }}
+          
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
